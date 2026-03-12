@@ -1,8 +1,8 @@
-name: Haftalık Screener (Cuma 19:00)
+name: Günlük Screener (Pzt-Per 19:00)
 
 on:
   schedule:
-    - cron: '0 16 * * 5'   # Cuma 16:00 UTC = 19:00 TR
+    - cron: '0 16 * * 1-4'  # Pzt-Per 16:00 UTC = 19:00 TR
   workflow_dispatch:
 
 permissions:
@@ -18,11 +18,11 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install yfinance pandas numpy requests
-      - run: python screener.py
+      - run: python screener_gunluk.py
       - name: Geçmişi kaydet
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add gecmis.json || true
-          git diff --staged --quiet || git commit -m "haftalik gecmis $(date +'%Y-%m-%d')"
+          git add gecmis_gunluk.json || true
+          git diff --staged --quiet || git commit -m "gunluk gecmis $(date +'%Y-%m-%d')"
           git push || true
