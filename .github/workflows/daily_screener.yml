@@ -2,7 +2,10 @@ name: BIST Momentum Screener
 
 on:
   schedule:
-    - cron: '30 15 * * 1-5'
+    # Haftalık: Her Cuma 16:00 UTC = 19:00 Türkiye
+    - cron: '0 16 * * 5'
+    # Günlük: Pzt-Per 16:00 UTC = 19:00 Türkiye (Cuma haftalık var)
+    - cron: '0 16 * * 1-4'
   workflow_dispatch:
 
 permissions:
@@ -11,7 +14,7 @@ permissions:
 jobs:
   run-screener:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Kodu çek
@@ -25,13 +28,18 @@ jobs:
       - name: Kütüphaneleri kur
         run: pip install yfinance pandas numpy requests
 
-      - name: Screener çalıştır
+      - name: Günlük screener (Pzt-Per)
+        if: github.event.schedule == '0 16 * * 1-4' || github.event_name == 'workflow_dispatch'
+        run: python screener_gunluk.py
+
+      - name: Haftalık screener (Cuma)
+        if: github.event.schedule == '0 16 * * 5' || github.event_name == 'workflow_dispatch'
         run: python screener.py
 
-      - name: Geçmiş dosyasını kaydet
+      - name: Geçmiş dosyalarını kaydet
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add gecmis.json || true
+          git add gecmis.json gecmis_gunluk.json || true
           git diff --staged --quiet || git commit -m "gecmis guncellendi $(date +'%Y-%m-%d')"
           git push || true
