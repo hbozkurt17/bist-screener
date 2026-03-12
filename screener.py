@@ -3,15 +3,16 @@ import pandas as pd
 import numpy as np
 import requests
 import os
+import json
 import warnings
-from datetime import datetime
+from datetime import datetime, date
+from pathlib import Path
+
 warnings.filterwarnings('ignore')
 
-# ── Telegram Ayarları (GitHub Secrets'tan gelir) ──────────
 BOT_TOKEN = "8766976766:AAGCxR_ussy_n-vED6Jono-U5tvVQC2UPN0"
 CHAT_ID   = "1019011392"
 
-# ── Kriterler ─────────────────────────────────────────────
 HAFTALIK_ESIK  = 5.0
 ADR_ESIK       = 2.0
 HACIM_ESIK     = 10.0
@@ -20,6 +21,11 @@ BREAKOUT_HAFTA = 8
 HACIM_KAT      = 1.5
 TREND_HAFTA    = 6
 TREND_MIN_POZ  = 4
+TOP_N          = 10
+ATR_PERIOD     = 14
+ATR_STOP_KAT   = 1.5
+ATR_HEDEF_KAT  = 3.0
+HISTORY_FILE   = "gecmis.json"
 
 TICKERS = [
     'ACSEL','ADANA','ADBGR','ADEL','ADESE','AFYON','AGESA','AGHOL','AGYO','AHGAZ',
@@ -63,19 +69,72 @@ TICKERS = [
     'YGYO','YKSLN','YONGA','YYLGD','ZEDUR','ZRGYO'
 ]
 
-
 def send_telegram(msg):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    requests.post(url, json={
+    resp = requests.post(url, json={
         "chat_id": CHAT_ID,
         "text": msg,
-        "parse_mode": "HTML"
+        "parse_mode": "HTML",
+        "disable_web_page_preview": True
     })
+    return resp.status_code == 200
 
+def load_history():
+    if Path(HISTORY_FILE).exists():
+        with open(HISTORY_FILE) as f:
+            return json.load(f)
+    return {}
+
+def save_history(history):
+    with open(HISTORY_FILE, 'w') as f:
+        json.dump(history, f, indent=2)
+
+def update_history(history, bugunun_listesi):
+    bugun = str(date.today())
+    for ticker in bugunun_listesi:
+        if ticker not in history:
+            history[ticker] = {"streak": 1, "ilk_tarih": bugun, "son_tarih": bugun}
+        else:
+            history[ticker]["streak"] += 1
+            history[ticker]["son_tarih"] = bugun
+    for ticker in list(history.keys()):
+        if ticker not in bugunun_listesi:
+            history[ticker]["streak"] = 0
+    return history
 
 def get_ema(series, period):
     return series.ewm(span=period, adjust=False).mean().iloc[-1]
 
+def calc_atr(high, low, close, period=14):
+    h = high.values
+    l = low.values
+    c = close.values
+    tr = np.maximum(h[1:] - l[1:],
+         np.maximum(abs(h[1:] - c[:-1]),
+                    abs(l[1:] - c[:-1])))
+    if len(tr) < period:
+        return None
+    return float(np.mean(tr[-period:]))
+
+def calc_trend_suresi(closes, e21_series):
+    ema21 = e21_series.values
+    cls   = closes.values
+    count = 0
+    for i in range(len(cls) - 1, -1, -1):
+        if cls[i] > ema21[i]:
+            count += 1
+        else:
+            break
+    return count
+
+def calc_risk(adr, atr_pct):
+    if adr is None or atr_pct is None:
+        return "Orta", "🟡"
+    if adr > 15 or atr_pct > 12:
+        return "Yüksek", "🔴"
+    elif adr > 7 or atr_pct > 6:
+        return "Orta", "🟡"
+    return "Düşük", "🟢"
 
 def analyze(ticker, df, benchmark):
     try:
@@ -89,7 +148,6 @@ def analyze(ticker, df, benchmark):
         cur  = float(closes.iloc[-1])
         prev = float(closes.iloc[-2])
 
-        # Temel kriterler
         w_chg = (cur - prev) / prev * 100
         c1 = bool(w_chg > HAFTALIK_ESIK)
 
@@ -98,7 +156,8 @@ def analyze(ticker, df, benchmark):
         adr = float(np.mean(dr))
         c2  = bool(adr >= ADR_ESIK)
 
-        e21 = get_ema(closes, 21)
+        e21_series = closes.ewm(span=21, adjust=False).mean()
+        e21 = float(e21_series.iloc[-1])
         c3  = bool(cur > e21)
 
         e50 = get_ema(closes, 50) if len(closes) >= 50 else None
@@ -114,9 +173,7 @@ def analyze(ticker, df, benchmark):
 
         temel = sum(1 for x in [c1, c2, c3, c4, c5] if x is True)
 
-        # Pro kriterler
-        rs_val = None
-        p1 = None
+        rs_val, p1 = None, None
         try:
             aln = pd.concat([closes.rename('s'), benchmark.rename('b')], axis=1).dropna()
             if len(aln) >= 13:
@@ -129,11 +186,9 @@ def analyze(ticker, df, benchmark):
 
         p2 = None
         if len(closes) >= BREAKOUT_HAFTA + 1:
-            prev_high = float(closes.iloc[-(BREAKOUT_HAFTA + 1):-1].max())
-            p2 = bool(cur > prev_high)
+            p2 = bool(cur > float(closes.iloc[-(BREAKOUT_HAFTA + 1):-1].max()))
 
-        vol_oran = None
-        p3 = None
+        vol_oran, p3 = None, None
         if len(vols) >= 11:
             cv = float(vols.iloc[-1])
             av = float(vols.iloc[-11:-1].mean())
@@ -141,11 +196,10 @@ def analyze(ticker, df, benchmark):
                 vol_oran = cv / av
                 p3 = bool(vol_oran >= HACIM_KAT)
 
-        poz_hafta = None
-        p4 = None
+        poz_hafta, p4 = None, None
         if len(closes) >= TREND_HAFTA + 1:
-            degisimler = closes.iloc[-(TREND_HAFTA + 1):].pct_change().dropna()
-            poz_hafta = int((degisimler > 0).sum())
+            deg = closes.iloc[-(TREND_HAFTA + 1):].pct_change().dropna()
+            poz_hafta = int((deg > 0).sum())
             p4 = bool(poz_hafta >= TREND_MIN_POZ)
 
         p5 = bool(e21 > e50) if e50 is not None else None
@@ -153,34 +207,83 @@ def analyze(ticker, df, benchmark):
         pro    = sum(1 for x in [p1, p2, p3, p4, p5] if x is True)
         toplam = temel + pro
 
+        atr = calc_atr(highs, lows, closes, ATR_PERIOD)
+        atr_pct   = round(atr / cur * 100, 2) if atr else None
+        stop      = round(cur - ATR_STOP_KAT * atr, 2) if atr else None
+        hedef     = round(cur + ATR_HEDEF_KAT * atr, 2) if atr else None
+        stop_pct  = round((stop - cur) / cur * 100, 1) if stop else None
+        hedef_pct = round((hedef - cur) / cur * 100, 1) if hedef else None
+
+        trend_sure          = calc_trend_suresi(closes, e21_series)
+        risk_label, risk_em = calc_risk(adr, atr_pct)
+
         return {
-            'ticker':  ticker,
-            'fiyat':   round(cur, 2),
-            'w_chg':   round(w_chg, 2),
-            'adr':     round(adr, 2),
-            'rs':      round(rs_val, 3) if rs_val else None,
-            'temel':   temel,
-            'pro':     pro,
-            'toplam':  toplam,
-            'c1': c1, 'c2': c2, 'c3': c3, 'c4': c4, 'c5': c5,
-            'p1': p1, 'p2': p2, 'p3': p3, 'p4': p4, 'p5': p5,
+            'ticker':     ticker,
+            'fiyat':      round(cur, 2),
+            'w_chg':      round(w_chg, 2),
+            'adr':        round(adr, 2),
+            'rs':         round(rs_val, 3) if rs_val else None,
+            'atr_pct':    atr_pct,
+            'stop':       stop,
+            'stop_pct':   stop_pct,
+            'hedef':      hedef,
+            'hedef_pct':  hedef_pct,
+            'trend_sure': trend_sure,
+            'risk_label': risk_label,
+            'risk_emoji': risk_em,
+            'temel':      temel,
+            'pro':        pro,
+            'toplam':     toplam,
         }
     except:
         return None
 
+def format_mesaj(top10, history, taranan, bugun, saat, guclu):
+    msg = (
+        f"📊 <b>BIST Pro Momentum Screener</b>\n"
+        f"📅 {bugun}  |  🕕 {saat}\n"
+        f"🔍 {taranan} hisse  |  💪 8+ skor: {guclu} hisse\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"🏆 <b>GÜNÜN EN GÜÇLÜ {TOP_N} HİSSESİ</b>\n"
+    )
+    for i, row in enumerate(top10.itertuples(), 1):
+        t      = row.ticker
+        streak = history.get(t, {}).get("streak", 1)
+        rozet  = f" 🔥x{streak}" if streak >= 3 else (" 🔁x2" if streak == 2 else "")
+        w_sign = "+" if row.w_chg >= 0 else ""
+        stop_s  = f"{row.stop} TL ({row.stop_pct}%)" if row.stop else "—"
+        hedef_s = f"{row.hedef} TL (+{row.hedef_pct}%)" if row.hedef else "—"
+        tv      = f"https://tr.tradingview.com/chart/?symbol=BIST:{t}"
+        tb      = "🟩" * row.temel + "⬜" * (5 - row.temel)
+        pb      = "🔵" * row.pro   + "⬜" * (5 - row.pro)
+        msg += (
+            f"\n{i}. <b>${t}</b>{rozet}  —  {row.fiyat} TL\n"
+            f"   📈 {w_sign}{row.w_chg}%  |  ADR: {row.adr}%  |  RS: {row.rs or '—'}\n"
+            f"   ⏱ Trendde: <b>{row.trend_sure} hafta</b>  |  {row.risk_emoji} {row.risk_label} risk\n"
+            f"   🛑 Stop: {stop_s}\n"
+            f"   🎯 Hedef: {hedef_s}\n"
+            f"   {tb} Temel {row.temel}/5\n"
+            f"   {pb} Pro {row.pro}/5  —  <b>{row.toplam}/10</b>  |  <a href='{tv}'>📊 Grafik</a>\n"
+        )
+    msg += (
+        f"\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+        f"🔥≥3 gün  🔁2 gün üst üste listede\n"
+        f"⚠️ Yatırım tavsiyesi değildir."
+    )
+    return msg
 
 def main():
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] Tarama başlıyor...")
-    send_telegram("⏳ <b>BIST Momentum Taraması başladı...</b>")
+    bugun = datetime.now().strftime('%d.%m.%Y')
+    saat  = datetime.now().strftime('%H:%M')
+    print(f"[{saat}] Tarama başlıyor...")
+    send_telegram(f"⏳ <b>BIST Pro Screener başladı...</b> ({bugun})")
 
-    # Benchmark
     xu100 = yf.download('XU100.IS', period='2y', interval='1wk',
                          auto_adjust=True, progress=False)
     if isinstance(xu100.columns, pd.MultiIndex):
         xu100.columns = xu100.columns.get_level_values(0)
     benchmark = xu100['Close'].squeeze().dropna()
 
-    # Hisse verileri
     stock_data = {}
     for i, ticker in enumerate(TICKERS):
         try:
@@ -195,69 +298,26 @@ def main():
                 stock_data[ticker] = raw
         except:
             pass
-        if (i + 1) % 50 == 0:
-            print(f"  {i+1}/{len(TICKERS)} hisse işlendi...")
+        if (i + 1) % 75 == 0:
+            print(f"  {i+1}/{len(TICKERS)} işlendi...")
 
-    print(f"  {len(stock_data)} hisse verisi alındı.")
-
-    # Analiz
-    results = []
-    for ticker, df in stock_data.items():
-        r = analyze(ticker, df, benchmark)
-        if r:
-            results.append(r)
-
+    results = [r for r in (analyze(t, d, benchmark) for t, d in stock_data.items()) if r]
     if not results:
         send_telegram("⚠️ Bugün tarama sonucu alınamadı.")
         return
 
-    df = pd.DataFrame(results).sort_values('toplam', ascending=False)
-    taranan = len(df)
+    df_all = pd.DataFrame(results).sort_values('toplam', ascending=False)
+    top10  = df_all.head(TOP_N)
+    guclu  = len(df_all[df_all['toplam'] >= 8])
 
-    # İlk 5 — en yüksek toplam skor
-    top5 = df.head(5)
+    history = load_history()
+    history = update_history(history, top10['ticker'].tolist())
+    save_history(history)
 
-    bugun = datetime.now().strftime('%d.%m.%Y')
-    saat  = datetime.now().strftime('%H:%M')
-
-    mesaj = f"""📊 <b>BIST Momentum Screener</b>
-📅 {bugun} | 🕕 {saat}
-🔍 {taranan} hisse tarandı
-
-🏆 <b>GÜNÜN EN GÜÇLÜ 5 HİSSESİ</b>
-━━━━━━━━━━━━━━━━━━━━━━━"""
-
-    semboller = {
-        True:  '✅',
-        False: '❌',
-        None:  '—'
-    }
-
-    for i, row in enumerate(top5.itertuples(), 1):
-        temel_bar = '🟩' * row.temel + '⬜' * (5 - row.temel)
-        pro_bar   = '🔵' * row.pro   + '⬜' * (5 - row.pro)
-        w_sign    = '+' if row.w_chg >= 0 else ''
-
-        mesaj += f"""
-
-{i}. <b>${row.ticker}</b> — {row.fiyat} TL
-   Haftalık: <b>{w_sign}{row.w_chg}%</b> | ADR: {row.adr}% | RS: {row.rs if row.rs else '—'}
-   Temel {row.temel}/5: {temel_bar}
-   Pro    {row.pro}/5: {pro_bar}
-   Toplam: <b>{row.toplam}/10</b>"""
-
-    # Kaç hisse 8+ aldı
-    guclu = len(df[df['toplam'] >= 8])
-    mesaj += f"""
-
-━━━━━━━━━━━━━━━━━━━━━━━
-💪 8+ skor alan: <b>{guclu} hisse</b>
-⚠️ Bu mesaj yatırım tavsiyesi değildir."""
-
+    mesaj = format_mesaj(top10, history, len(df_all), bugun, saat, guclu)
     send_telegram(mesaj)
-    print("✅ Telegram mesajı gönderildi.")
+    print("✅ Gönderildi.")
     print(mesaj)
-
 
 if __name__ == '__main__':
     main()
