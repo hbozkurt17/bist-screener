@@ -1,0 +1,27 @@
+name: BIST Momentum Screener
+
+on:
+  schedule:
+    # Her gün 15:30 UTC = 18:30 Türkiye saati (UTC+3)
+    - cron: '30 15 * * 1-5'   # Pazartesi-Cuma
+  workflow_dispatch:            # Elle de çalıştırılabilir
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Kodu çek
+        uses: actions/checkout@v4
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Kütüphaneleri kur
+        run: pip install yfinance pandas numpy requests
+
+      - name: Screener'ı çalıştır
+        run: python screener.py
