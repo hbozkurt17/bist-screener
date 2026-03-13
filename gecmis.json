@@ -1,26 +1,26 @@
 {
   "AYCES": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "TMPOL": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "HLGYO": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "PRZMA": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "PCILT": {
-    "streak": 2,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-12"
   },
@@ -35,14 +35,14 @@
     "son_tarih": "2026-03-12"
   },
   "AYES": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "NUHCM": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
   },
   "KTLEV": {
     "streak": 0,
@@ -50,18 +50,33 @@
     "son_tarih": "2026-03-12"
   },
   "AKSUE": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-12"
   },
   "OYYAT": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-12"
   },
   "NIBAS": {
-    "streak": 1,
+    "streak": 2,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-13"
+  },
+  "AFYON": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-13",
+    "son_tarih": "2026-03-13"
+  },
+  "KRDMB": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-13",
+    "son_tarih": "2026-03-13"
+  },
+  "AYGAZ": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-13",
+    "son_tarih": "2026-03-13"
   }
 }
