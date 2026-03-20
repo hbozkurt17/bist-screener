@@ -1,46 +1,46 @@
 {
   "AYCES": {
-    "streak": 3,
+    "streak": 4,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-13"
+    "son_tarih": "2026-03-20"
   },
   "TMPOL": {
-    "streak": 3,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-13"
   },
   "HLGYO": {
-    "streak": 3,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-13"
   },
   "PRZMA": {
-    "streak": 3,
+    "streak": 4,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-13"
+    "son_tarih": "2026-03-20"
   },
   "PCILT": {
-    "streak": 0,
+    "streak": 1,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-20"
   },
   "EGGUB": {
-    "streak": 0,
+    "streak": 1,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-20"
   },
   "ALKLC": {
-    "streak": 0,
+    "streak": 1,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-20"
   },
   "AYES": {
-    "streak": 3,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-13"
   },
   "NUHCM": {
-    "streak": 3,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-13"
   },
@@ -60,23 +60,43 @@
     "son_tarih": "2026-03-12"
   },
   "NIBAS": {
-    "streak": 2,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-13"
   },
   "AFYON": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-13",
     "son_tarih": "2026-03-13"
   },
   "KRDMB": {
-    "streak": 1,
+    "streak": 2,
+    "ilk_tarih": "2026-03-13",
+    "son_tarih": "2026-03-20"
+  },
+  "AYGAZ": {
+    "streak": 0,
     "ilk_tarih": "2026-03-13",
     "son_tarih": "2026-03-13"
   },
-  "AYGAZ": {
+  "ARASE": {
     "streak": 1,
-    "ilk_tarih": "2026-03-13",
-    "son_tarih": "2026-03-13"
+    "ilk_tarih": "2026-03-20",
+    "son_tarih": "2026-03-20"
+  },
+  "BAGFS": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-20",
+    "son_tarih": "2026-03-20"
+  },
+  "BTCIM": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-20",
+    "son_tarih": "2026-03-20"
+  },
+  "POLHO": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-20",
+    "son_tarih": "2026-03-20"
   }
 }
