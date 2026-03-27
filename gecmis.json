@@ -1,8 +1,8 @@
 {
   "AYCES": {
-    "streak": 4,
+    "streak": 5,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-20"
+    "son_tarih": "2026-03-27"
   },
   "TMPOL": {
     "streak": 0,
@@ -15,22 +15,22 @@
     "son_tarih": "2026-03-13"
   },
   "PRZMA": {
-    "streak": 4,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-20"
   },
   "PCILT": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-20"
   },
   "EGGUB": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-20"
   },
   "ALKLC": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-03-20"
   },
@@ -45,9 +45,9 @@
     "son_tarih": "2026-03-13"
   },
   "KTLEV": {
-    "streak": 0,
+    "streak": 1,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-12"
+    "son_tarih": "2026-03-27"
   },
   "AKSUE": {
     "streak": 0,
@@ -70,9 +70,9 @@
     "son_tarih": "2026-03-13"
   },
   "KRDMB": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-13",
-    "son_tarih": "2026-03-20"
+    "son_tarih": "2026-03-27"
   },
   "AYGAZ": {
     "streak": 0,
@@ -80,23 +80,58 @@
     "son_tarih": "2026-03-13"
   },
   "ARASE": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-20",
     "son_tarih": "2026-03-20"
   },
   "BAGFS": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-20",
     "son_tarih": "2026-03-20"
   },
   "BTCIM": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-20",
     "son_tarih": "2026-03-20"
   },
   "POLHO": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-20",
     "son_tarih": "2026-03-20"
+  },
+  "FONET": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "VERUS": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "ARTMS": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "ESCAR": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "AKMGY": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "BYDNR": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
+  },
+  "HEDEF": {
+    "streak": 1,
+    "ilk_tarih": "2026-03-27",
+    "son_tarih": "2026-03-27"
   }
 }
