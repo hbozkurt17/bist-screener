@@ -1,8 +1,8 @@
 {
   "AYCES": {
-    "streak": 5,
+    "streak": 6,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-27"
+    "son_tarih": "2026-04-03"
   },
   "TMPOL": {
     "streak": 0,
@@ -45,9 +45,9 @@
     "son_tarih": "2026-03-13"
   },
   "KTLEV": {
-    "streak": 1,
+    "streak": 2,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-03-27"
+    "son_tarih": "2026-04-03"
   },
   "AKSUE": {
     "streak": 0,
@@ -70,9 +70,9 @@
     "son_tarih": "2026-03-13"
   },
   "KRDMB": {
-    "streak": 3,
+    "streak": 4,
     "ilk_tarih": "2026-03-13",
-    "son_tarih": "2026-03-27"
+    "son_tarih": "2026-04-03"
   },
   "AYGAZ": {
     "streak": 0,
@@ -95,43 +95,68 @@
     "son_tarih": "2026-03-20"
   },
   "POLHO": {
-    "streak": 0,
+    "streak": 1,
     "ilk_tarih": "2026-03-20",
-    "son_tarih": "2026-03-20"
+    "son_tarih": "2026-04-03"
   },
   "FONET": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
   },
   "VERUS": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
   },
   "ARTMS": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
   },
   "ESCAR": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
   },
   "AKMGY": {
-    "streak": 1,
+    "streak": 2,
     "ilk_tarih": "2026-03-27",
-    "son_tarih": "2026-03-27"
+    "son_tarih": "2026-04-03"
   },
   "BYDNR": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
   },
   "HEDEF": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-27",
     "son_tarih": "2026-03-27"
+  },
+  "AKFYE": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-03",
+    "son_tarih": "2026-04-03"
+  },
+  "MOBTL": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-03",
+    "son_tarih": "2026-04-03"
+  },
+  "ULUFA": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-03",
+    "son_tarih": "2026-04-03"
+  },
+  "ADEL": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-03",
+    "son_tarih": "2026-04-03"
+  },
+  "TRGYO": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-03",
+    "son_tarih": "2026-04-03"
   }
 }
