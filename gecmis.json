@@ -1,8 +1,8 @@
 {
   "AYCES": {
-    "streak": 6,
+    "streak": 7,
     "ilk_tarih": "2026-03-12",
-    "son_tarih": "2026-04-03"
+    "son_tarih": "2026-04-10"
   },
   "TMPOL": {
     "streak": 0,
@@ -45,7 +45,7 @@
     "son_tarih": "2026-03-13"
   },
   "KTLEV": {
-    "streak": 2,
+    "streak": 0,
     "ilk_tarih": "2026-03-12",
     "son_tarih": "2026-04-03"
   },
@@ -70,9 +70,9 @@
     "son_tarih": "2026-03-13"
   },
   "KRDMB": {
-    "streak": 4,
+    "streak": 5,
     "ilk_tarih": "2026-03-13",
-    "son_tarih": "2026-04-03"
+    "son_tarih": "2026-04-10"
   },
   "AYGAZ": {
     "streak": 0,
@@ -95,7 +95,7 @@
     "son_tarih": "2026-03-20"
   },
   "POLHO": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-03-20",
     "son_tarih": "2026-04-03"
   },
@@ -120,9 +120,9 @@
     "son_tarih": "2026-03-27"
   },
   "AKMGY": {
-    "streak": 2,
+    "streak": 3,
     "ilk_tarih": "2026-03-27",
-    "son_tarih": "2026-04-03"
+    "son_tarih": "2026-04-10"
   },
   "BYDNR": {
     "streak": 0,
@@ -135,28 +135,63 @@
     "son_tarih": "2026-03-27"
   },
   "AKFYE": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-04-03",
     "son_tarih": "2026-04-03"
   },
   "MOBTL": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-04-03",
     "son_tarih": "2026-04-03"
   },
   "ULUFA": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-04-03",
     "son_tarih": "2026-04-03"
   },
   "ADEL": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-04-03",
     "son_tarih": "2026-04-03"
   },
   "TRGYO": {
-    "streak": 1,
+    "streak": 0,
     "ilk_tarih": "2026-04-03",
     "son_tarih": "2026-04-03"
+  },
+  "PETKM": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "KAPLM": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "KTSKR": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "BAKAB": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "ANELE": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "MAGEN": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
+  },
+  "MARKA": {
+    "streak": 1,
+    "ilk_tarih": "2026-04-10",
+    "son_tarih": "2026-04-10"
   }
 }
