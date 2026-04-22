@@ -1,67 +1,53 @@
-# ============================================================
-# BIST30 ve BIST100 Hisse Listeleri (Yahoo Finance formatı: .IS)
-# Son güncelleme: 14 Nisan 2026 — kaynak: tr.investing.com
-# ============================================================
+# BIST Hisse Listesi (Yahoo Finance formatı: .IS)
+# Kaynak: VPS bist_analiz_listesi.csv — Son güncelleme: 22 Nisan 2026
 
-BIST30 = [
-    # Bankacılık & Finans
-    "AKBNK.IS", "GARAN.IS", "ISCTR.IS", "VAKBN.IS", "YKBNK.IS",
-    "DESTK.IS",
-    # Holding & Sanayi
-    "KCHOL.IS", "SAHOL.IS", "ENKAI.IS", "ASTOR.IS",
-    # Enerji & Kimya
-    "PETKM.IS", "TUPRS.IS", "GUBRF.IS",
-    # Demir-Çelik & Metal
-    "EREGL.IS", "KRDMD.IS",
-    # Otomotiv
-    "FROTO.IS", "TOASO.IS",
-    # Havacılık & Turizm
-    "THYAO.IS", "PGSUS.IS", "TAVHL.IS",
-    # Teknoloji & Telecom
-    "ASELS.IS", "TCELL.IS", "TTKOM.IS",
-    # Perakende & Gıda
-    "BIMAS.IS", "MGROS.IS", "AEFES.IS",
-    # GYO & Diğer
-    "EKGYO.IS", "SISE.IS", "SASA.IS", "KOZAL.IS",
+BIST = [
+    "ACSEL.IS", "ADESE.IS", "AEFES.IS", "AGESA.IS", "AGHOL.IS", "AGYO.IS",
+    "AHGAZ.IS", "AKBNK.IS", "AKCNS.IS", "AKENR.IS", "AKFGY.IS", "AKGRT.IS",
+    "AKMGY.IS", "AKSA.IS",  "AKSEN.IS", "AKSGY.IS", "ALARK.IS", "ALBRK.IS",
+    "ALCTL.IS", "ALFAS.IS", "ALKA.IS",  "ALKLC.IS", "ALKIM.IS", "ALTNY.IS",
+    "ANELE.IS", "ANSGR.IS", "ANHYT.IS", "ARCLK.IS", "ARDYZ.IS", "ARENA.IS",
+    "ARSAN.IS", "ARTMS.IS", "ARZUM.IS", "ASGYO.IS", "ASELS.IS", "ASTOR.IS",
+    "ASUZU.IS", "ATAGY.IS", "ATATP.IS", "ATLAS.IS", "ATSYH.IS", "AVGYO.IS",
+    "AVOD.IS",  "AVPGY.IS", "AYDEM.IS", "AYEN.IS",  "AYGAZ.IS", "AZTEK.IS",
+    "BAGFS.IS", "BAKAB.IS", "BALAT.IS", "BANVT.IS", "BARMA.IS", "BASGZ.IS",
+    "BERA.IS",  "BEYAZ.IS", "BFREN.IS", "BIMAS.IS", "BIOEN.IS", "BIZIM.IS",
+    "BORSK.IS", "BRISA.IS", "BRSAN.IS", "BRYAT.IS", "BTCIM.IS", "BUCIM.IS",
+    "BVSAN.IS", "CANTE.IS", "CCOLA.IS", "CELHA.IS", "CEMAS.IS", "CEMTS.IS",
+    "CIMSA.IS", "CLEBI.IS", "CONSE.IS", "CRDFA.IS", "CWENE.IS", "DENGE.IS",
+    "DESA.IS",  "DESPC.IS", "DEVA.IS",  "DGATE.IS", "DMSAS.IS", "DOAS.IS",
+    "DOHOL.IS", "DYOBY.IS", "DZGYO.IS", "ECILC.IS", "ECZYT.IS", "EDATA.IS",
+    "EGEEN.IS", "EGEPO.IS", "EGPRO.IS", "EGSER.IS", "EKGYO.IS", "EMKEL.IS",
+    "ENJSA.IS", "ENKAI.IS", "ERBOS.IS", "EREGL.IS", "ERSU.IS",  "ESCOM.IS",
+    "ESEN.IS",  "ETILR.IS", "EUPWR.IS", "FENER.IS", "FLAP.IS",  "FMIZP.IS",
+    "FONET.IS", "FRIGO.IS", "FROTO.IS", "GARAN.IS", "GEDIK.IS", "GEDZA.IS",
+    "GENIL.IS", "GENTS.IS", "GESAN.IS", "GIPTA.IS", "GLBMD.IS", "GLYHO.IS",
+    "GOLTS.IS", "GRSEL.IS", "GSDDE.IS", "GSDHO.IS", "GUBRF.IS", "GWIND.IS",
+    "HALKB.IS", "HEKTS.IS", "HLGYO.IS", "HRKET.IS", "HTTBT.IS", "HUNER.IS",
+    "HURGZ.IS", "ICBCT.IS", "IDGYO.IS", "IHGZT.IS", "IHLAS.IS", "IHLGM.IS",
+    "INDES.IS", "INTEM.IS", "ISATR.IS", "ISCTR.IS", "ISDMR.IS", "ISGSY.IS",
+    "ISGYO.IS", "ISSEN.IS", "ISYAT.IS", "IZENR.IS", "IZMDC.IS", "JANTS.IS",
+    "KAPLM.IS", "KAREL.IS", "KARSN.IS", "KATMR.IS", "KAYSE.IS", "KCAER.IS",
+    "KCHOL.IS", "KENT.IS",  "KFEIN.IS", "KLGYO.IS", "KLNMA.IS", "KMPUR.IS",
+    "KNFRT.IS", "KONTR.IS", "KONYA.IS", "KORDS.IS", "KOTON.IS", "KRDMA.IS",
+    "KRDMB.IS", "KRDMD.IS", "KRVGD.IS", "KUTPO.IS", "KZBGY.IS", "LINK.IS",
+    "LMKDC.IS", "LKMNH.IS", "LOGO.IS",  "LRSHO.IS", "MAALT.IS", "MAGEN.IS",
+    "MARTI.IS", "MAVI.IS",  "MEKAG.IS", "MERIT.IS", "MIATK.IS", "MGROS.IS",
+    "MMCAS.IS", "MOBTL.IS", "MOGAN.IS", "MPARK.IS", "MSGYO.IS", "MTRKS.IS",
+    "MTRYO.IS", "NATEN.IS", "NETAS.IS", "NIBAS.IS", "NTHOL.IS", "NUHCM.IS",
+    "NUGYO.IS", "OBASE.IS", "ODAS.IS",  "OFSYM.IS", "ONCSM.IS", "ORCAY.IS",
+    "ORGE.IS",  "ORMA.IS",  "OTKAR.IS", "OYAKC.IS", "OZGYO.IS", "OZKGY.IS",
+    "PAPIL.IS", "PARSN.IS", "PCILT.IS", "PENGD.IS", "PETKM.IS", "PETUN.IS",
+    "PGSUS.IS", "PKENT.IS", "PLTUR.IS", "POLHO.IS", "PRKME.IS", "PSGYO.IS",
+    "QUAGR.IS", "RAYSG.IS", "REEDR.IS", "RGYAS.IS", "RNPOL.IS", "RODRG.IS",
+    "RYGYO.IS", "SAHOL.IS", "SAMAT.IS", "SANFM.IS", "SANKO.IS", "SARKY.IS",
+    "SASA.IS",  "SDTTR.IS", "SEKUR.IS", "SELEC.IS", "SELVA.IS", "SEYKM.IS",
+    "SILVR.IS", "SISE.IS",  "SKBNK.IS", "SKTAS.IS", "SMART.IS", "SMRTG.IS",
+    "SNGYO.IS", "SOKM.IS",  "SONME.IS", "TABGD.IS", "TATGD.IS", "TAVHL.IS",
+    "TCELL.IS", "TEKTU.IS", "THYAO.IS", "TKFEN.IS", "TMPOL.IS", "TMSN.IS",
+    "TNZTP.IS", "TOASO.IS", "TRGYO.IS", "TSKB.IS",  "TTKOM.IS", "TTRAK.IS",
+    "TUKAS.IS", "TUPRS.IS", "TURGG.IS", "TURSG.IS", "ULKER.IS", "ULUSE.IS",
+    "ULUUN.IS", "UNLU.IS",  "VAKBN.IS", "VAKKO.IS", "VBTYZ.IS", "VERTU.IS",
+    "VESTL.IS", "VKGYO.IS", "YATAS.IS", "YEOTK.IS", "YKSLN.IS", "YKBNK.IS",
+    "ZEDUR.IS", "ZOREN.IS",
 ]
-
-# BIST100 TAM LİSTE (BIST30 dahil)
-_BIST100_FULL = [
-    # ── BIST30 hisseleri ──────────────────────────────────────
-    "AKBNK.IS", "GARAN.IS", "ISCTR.IS", "VAKBN.IS", "YKBNK.IS",
-    "DESTK.IS", "KCHOL.IS", "SAHOL.IS", "ENKAI.IS", "ASTOR.IS",
-    "PETKM.IS", "TUPRS.IS", "GUBRF.IS", "EREGL.IS", "KRDMD.IS",
-    "FROTO.IS", "TOASO.IS", "THYAO.IS", "PGSUS.IS", "TAVHL.IS",
-    "ASELS.IS", "TCELL.IS", "TTKOM.IS", "BIMAS.IS", "MGROS.IS",
-    "AEFES.IS", "EKGYO.IS", "SISE.IS",  "SASA.IS",  "KOZAL.IS",
-    # ── Bankacılık & Finans (ex-30) ───────────────────────────
-    "SKBNK.IS", "QNBFB.IS", "ICBCT.IS", "ALBRK.IS",
-    "KLNMA.IS", "TSKB.IS",  "ENJSA.IS", "NTHOL.IS", "GSDHO.IS",
-    # ── Eski BIST30 → şimdi BIST100 ──────────────────────────
-    "ARCLK.IS", "DOHOL.IS", "HALKB.IS", "ODAS.IS",
-    "OTKAR.IS", "TKFEN.IS",
-    # ── Sanayi & Üretim (ex-30) ───────────────────────────────
-    "AGESA.IS", "AKCNS.IS", "AKSA.IS",  "AKSEN.IS",
-    "ALFAS.IS", "ALKIM.IS", "ASUZU.IS", "AVGYO.IS", "AYDEM.IS",
-    "AYGAZ.IS", "BAGFS.IS", "BERA.IS",  "BIOEN.IS", "BRISA.IS",
-    "BRYAT.IS", "BUCIM.IS", "CCOLA.IS", "CEMAS.IS", "CEMTS.IS",
-    "CLEBI.IS", "CIMSA.IS", "CWENE.IS", "DEVA.IS",  "DYOBY.IS",
-    "EGEEN.IS", "EGPRO.IS", "EUPWR.IS", "FENER.IS",
-    "FLAP.IS",  "GENIL.IS", "GESAN.IS", "GOLTS.IS",
-    "GWIND.IS", "HEKTS.IS", "ISGYO.IS", "IZENR.IS",
-    "JANTS.IS", "KAREL.IS", "KAYSE.IS", "KMPUR.IS",
-    "KONTR.IS", "KONYA.IS", "KORDS.IS", "KUTPO.IS", "LMKDC.IS",
-    "LOGO.IS",  "LRSHO.IS", "MAVI.IS",  "NETAS.IS", "NUHCM.IS",
-    "ORCAY.IS", "PARSN.IS", "PENGD.IS", "PRKME.IS", "RNPOL.IS",
-    "SELEC.IS", "SILVR.IS", "SMART.IS", "SMRTG.IS", "SOKM.IS",
-]
-
-# BIST100 ex-BIST30 (BIST30 hisseleri çıkarılmış)
-BIST100_EX_BIST30 = [t for t in _BIST100_FULL if t not in BIST30]
-
-if __name__ == "__main__":
-    print(f"BIST30 hisse sayısı   : {len(BIST30)}")
-    print(f"BIST100 ex-30 sayısı  : {len(BIST100_EX_BIST30)}")
-    print(f"Toplam taranacak      : {len(BIST30) + len(BIST100_EX_BIST30)}")
-    overlap = set(BIST30) & set(BIST100_EX_BIST30)
-    print(f"Çakışma               : {len(overlap)} hisse {overlap if overlap else '(yok)'}")
