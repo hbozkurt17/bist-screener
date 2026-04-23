@@ -1,72 +1,27 @@
-name: ⚡ Qullamaggie BIST Scanner
+name: BIST Momentum Scanner
 
 on:
   schedule:
     # Her hafta içi 15:30 UTC = 18:30 Türkiye saati (UTC+3)
     - cron: '30 15 * * 1-5'
   workflow_dispatch:
-    inputs:
-      mode:
-        description: 'Tarama modu'
-        required: true
-        default: 'both'
-        type: choice
-        options:
-          - both
-          - bist30
-          - bist100
 
 jobs:
-
-  scan-bist30:
-    name: 📊 BIST30 Taraması
+  scan:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'schedule' || github.event.inputs.mode == 'bist30' || github.event.inputs.mode == 'both' }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      - run: pip install -r scanner/requirements.txt
-      - name: 🔍 BIST30 tara
-        run: python scanner/scanner.py --mode bist30
-        env:
-          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
-  scan-bist100-ex30:
-    name: 📊 BIST100 (BIST30 hariç) Taraması
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'schedule' || github.event.inputs.mode == 'bist100' || github.event.inputs.mode == 'both' }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-      - run: pip install -r scanner/requirements.txt
-      - name: 🔍 BIST100 (ex-BIST30) tara
-        run: python scanner/scanner.py --mode bist100
-        env:
-          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Bağımlılıkları kur
+        run: pip install -r scanner/requirements.txt
 
-  # Her iki tarama tamamlandıktan sonra birleşik Telegram bildirimi gönder
-  notify:
-    name: 📱 Telegram Bildirimi
-    runs-on: ubuntu-latest
-    needs: [scan-bist30, scan-bist100-ex30]
-    if: ${{ always() && (github.event_name == 'schedule' || github.event.inputs.mode == 'both') }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-      - run: pip install -r scanner/requirements.txt
-      - name: 📱 Birleşik Telegram bildirimi gönder
-        run: python scanner/scanner.py --mode both
+      - name: BIST Tara & Telegram Gönder
+        run: python scanner/scanner.py
         env:
           TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

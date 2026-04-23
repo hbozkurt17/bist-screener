@@ -1,5 +1,5 @@
 """
-Qullamaggie BIST Scanner  v3
+Qullamaggie BIST Scanner  v4
 =============================
 Kristjan Kullamägi stratejisine göre BIST hisselerini tarar.
 GitHub Actions tarafından her hafta içi 18:30 Türkiye saatinde çalıştırılır.
@@ -11,7 +11,6 @@ SİNYAL MANTIĞI:
   - "Yeni" = Dün bu koşul yoktu, bugün var (ilk mumda yakala)
 """
 
-import argparse
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -25,20 +24,19 @@ try:
 except ImportError:
     REQUESTS_OK = False
 
-from stocks import BIST30, BIST100_EX_BIST30
+from stocks import BIST
 
 # ── Parametreler ──────────────────────────────────────────────────────────────
 ADR_PERIOD      = 20
 ADR_MIN_PCT     = 4.0
 EMA_LENGTHS     = [10, 20, 50, 200]
-VOL_MA_PERIOD   = 10
-VOL_MULTIPLIER  = 1.5    # AL sinyali için hacim eşiği
+VOL_MA_PERIOD   = 20
+VOL_MULTIPLIER  = 1.5
 LOOKBACK_DAYS   = 350
 
-# Bilgi amaçlı konsolidasyon parametreleri (sinyale etkisi yok)
 CONSOL_MIN_DAYS = 3
 CONSOL_MAX_DAYS = 10
-CONSOL_BAND_PCT = 5.0    # CLOSE bazlı %5
+CONSOL_BAND_PCT = 5.0
 ATR_PERIOD      = 10
 ATR_RATIO_MAX   = 0.75
 
@@ -60,7 +58,6 @@ def atr_series(high, low, close, period=ATR_PERIOD):
     return tr.rolling(period).mean()
 
 def consolidation_info(close: pd.Series) -> tuple[bool, int]:
-    """Bilgi amaçlı: CLOSE bazlı sıkışma tespiti."""
     for length in range(CONSOL_MIN_DAYS, CONSOL_MAX_DAYS + 1):
         w = close.iloc[-length:]
         lo, hi = w.min(), w.max()
@@ -69,7 +66,6 @@ def consolidation_info(close: pd.Series) -> tuple[bool, int]:
     return False, 0
 
 def squeeze_info(atr: pd.Series) -> bool:
-    """Bilgi amaçlı: ATR squeeze tespiti."""
     half = ATR_PERIOD // 2
     if len(atr.dropna()) < ATR_PERIOD + half:
         return False
@@ -107,7 +103,6 @@ def analyse(ticker: str) -> dict | None:
 
     last = df.iloc[-1]
 
-    # ── SINYAL KRİTERLERİ (sıkışmadan bağımsız) ─────────────────────────────
     adr_ok    = bool(last["ADR"] >= ADR_MIN_PCT)
     ema_fan   = bool(
         last["Close"]  > last["EMA10"]  and
@@ -117,26 +112,24 @@ def analyse(ticker: str) -> dict | None:
     )
     vol_surge = bool(last["Volume"] >= last["VolMA"] * VOL_MULTIPLIER)
 
-    al_today   = ema_fan and adr_ok and vol_surge      # AL
-    izle_today = ema_fan and adr_ok and not vol_surge  # İZLE
+    al_today   = ema_fan and adr_ok and vol_surge
+    izle_today = ema_fan and adr_ok and not vol_surge
 
-    # ── BİLGİ: Sıkışma & Squeeze ────────────────────────────────────────────
     consol, consol_len = consolidation_info(df["Close"])
     squeeze            = squeeze_info(df["ATR"])
 
-    # ── YENİLİK TESPİTİ (dün → bugün) ──────────────────────────────────────
     if len(df) >= 3:
-        df_p   = df.iloc[:-1]
-        lp     = df_p.iloc[-1]
-        adr_p  = bool(lp["ADR"] >= ADR_MIN_PCT)
-        fan_p  = bool(
+        df_p  = df.iloc[:-1]
+        lp    = df_p.iloc[-1]
+        adr_p = bool(lp["ADR"] >= ADR_MIN_PCT)
+        fan_p = bool(
             lp["Close"]  > lp["EMA10"]  and
             lp["EMA10"]  > lp["EMA20"]  and
             lp["EMA20"]  > lp["EMA50"]  and
             lp["EMA50"]  > lp["EMA200"]
         )
-        vol_p  = bool(lp["Volume"] >= lp["VolMA"] * VOL_MULTIPLIER)
-        al_p   = fan_p and adr_p and vol_p
+        vol_p = bool(lp["Volume"] >= lp["VolMA"] * VOL_MULTIPLIER)
+        al_p  = fan_p and adr_p and vol_p
         izle_p = fan_p and adr_p and not vol_p
     else:
         al_p = izle_p = False
@@ -153,11 +146,9 @@ def analyse(ticker: str) -> dict | None:
         "vol_ratio" : round(vol_ratio,             2),
         "ema_fan"   : ema_fan,
         "vol_surge" : vol_surge,
-        # Bilgi amaçlı
         "consol"    : consol,
         "consol_len": consol_len,
         "squeeze"   : squeeze,
-        # Sinyaller
         "new_al"    : new_al,
         "new_izle"  : new_izle,
     }
@@ -166,8 +157,8 @@ def analyse(ticker: str) -> dict | None:
 # ── Tarama & rapor ────────────────────────────────────────────────────────────
 
 def run_scan(tickers: list[str], label: str) -> dict:
-    als   = []
-    izles = []
+    als    = []
+    izles  = []
     errors = 0
 
     print(f"\n{'═'*64}")
@@ -193,7 +184,6 @@ def run_scan(tickers: list[str], label: str) -> dict:
         if result["new_al"]  : als.append(result)
         if result["new_izle"]: izles.append(result)
 
-    # ── Özet ─────────────────────────────────────────────────────────────────
     print(f"\n{'─'*64}")
     print(f"  ÖZET – {label}")
     print(f"{'─'*64}")
@@ -248,7 +238,7 @@ def send_telegram(text: str) -> bool:
         return False
 
 
-def format_telegram(r30: dict, r100: dict, now_tr: datetime) -> str:
+def format_telegram(result: dict, now_tr: datetime) -> str:
     def fmt_row(r):
         c  = f" 🔄{r['consol_len']}g" if r["consol"]  else ""
         sq = " 📉sq"                   if r["squeeze"] else ""
@@ -258,20 +248,17 @@ def format_telegram(r30: dict, r100: dict, now_tr: datetime) -> str:
     lines = [f"⚡ <b>MOMENTUM BIST SCANNER</b>",
              f"📅 {now_tr.strftime('%d.%m.%Y %H:%M')} TR\n"]
 
-    for lbl, res in [("BIST30", r30), ("BIST100 ex-30", r100)]:
-        lines.append(f"<b>── {lbl} ──</b>")
-        if res["als"]:
-            lines.append("🚀 <b>YENİ AL</b>")
-            lines += [fmt_row(r) for r in res["als"]]
-        else:
-            lines.append("🚀 AL sinyali yok")
+    if result["als"]:
+        lines.append("🚀 <b>YENİ AL</b>")
+        lines += [fmt_row(r) for r in result["als"]]
+    else:
+        lines.append("🚀 AL sinyali yok")
 
-        if res["izles"]:
-            lines.append("👀 <b>YENİ İZLE</b>")
-            lines += [fmt_row(r) for r in res["izles"]]
-        else:
-            lines.append("👀 İZLE sinyali yok")
-        lines.append("")
+    if result["izles"]:
+        lines.append("\n👀 <b>YENİ İZLE</b>")
+        lines += [fmt_row(r) for r in result["izles"]]
+    else:
+        lines.append("👀 İZLE sinyali yok")
 
     return "\n".join(lines)
 
@@ -279,29 +266,18 @@ def format_telegram(r30: dict, r100: dict, now_tr: datetime) -> str:
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["bist30", "bist100", "both"], default="both")
-    args = parser.parse_args()
-
     now_tr = datetime.now(tz=timezone.utc) + timedelta(hours=3)
     print(f"\n{'═'*64}")
-    print(f"  ⚡ MOMENTUM BIST SCANNER  v3")
+    print(f"  ⚡ MOMENTUM BIST SCANNER  v4")
     print(f"  {now_tr.strftime('%d.%m.%Y %H:%M')} TR")
     print(f"{'═'*64}")
 
-    r30  = {"als": [], "izles": []}
-    r100 = {"als": [], "izles": []}
+    result = run_scan(BIST, "📊 BIST")
 
-    if args.mode in ("bist30", "both"):
-        r30  = run_scan(BIST30,           "📊 BIST30")
-    if args.mode in ("bist100", "both"):
-        r100 = run_scan(BIST100_EX_BIST30,"📊 BIST100 (BIST30 hariç)")
-
-    if args.mode == "both":
-        msg  = format_telegram(r30, r100, now_tr)
-        sent = send_telegram(msg)
-        status = "✅ gönderildi" if sent else "ℹ️  TELEGRAM_TOKEN ayarlı değil"
-        print(f"Telegram: {status}")
+    msg  = format_telegram(result, now_tr)
+    sent = send_telegram(msg)
+    status = "✅ gönderildi" if sent else "ℹ️  TELEGRAM_TOKEN ayarlı değil"
+    print(f"Telegram: {status}")
 
 
 if __name__ == "__main__":
